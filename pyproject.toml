@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lord-sumi-env-doctor"
+version = "0.1.0"
+description = "Audit required environment variables safely"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [{name = "Lord_Sumi"}]
+
+[project.scripts]
+env-doctor = "env_doctor:main"
+
+[tool.setuptools]
+py-modules = ["env_doctor"]
