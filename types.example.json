@@ -1,0 +1,4 @@
+{
+  "PORT": "int",
+  "SERVICE_URL": "url"
+}
