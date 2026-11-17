@@ -1,0 +1,29 @@
+name: Arduino Uno and ESP32 firmware compile
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  compile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - core: arduino:avr
+            fqbn: arduino:avr:uno
+          - core: esp32:esp32
+            fqbn: esp32:esp32:esp32
+    steps:
+      - uses: actions/checkout@v4
+      - uses: arduino/setup-arduino-cli@v2
+      - name: Install board core
+        run: |
+          arduino-cli config init --overwrite
+          arduino-cli config add board_manager.additional_urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+          arduino-cli core update-index
+          arduino-cli core install "${{ matrix.core }}"
+      - name: Compile firmware for selected board
+        run: arduino-cli compile --fqbn "${{ matrix.fqbn }}" --warnings all "examples/arduino-config"
