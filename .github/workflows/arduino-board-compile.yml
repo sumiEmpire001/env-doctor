@@ -26,4 +26,4 @@ jobs:
           arduino-cli core update-index
           arduino-cli core install "${{ matrix.core }}"
       - name: Compile firmware for selected board
-        run: arduino-cli compile --fqbn "${{ matrix.fqbn }}" --warnings all "examples/arduino-config"
+        run: arduino-cli compile --build-path "$GITHUB_WORKSPACE/build" --fqbn "${{ matrix.fqbn }}" --warnings all "examples/arduino-config"
