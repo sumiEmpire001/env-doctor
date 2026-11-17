@@ -16,7 +16,16 @@ inline Result check(const char* value,Kind kind,std::size_t maxLength=256){
   const char* p=nullptr;
   if(!std::strncmp(value,"https://",8))p=value+8;
   else if(!std::strncmp(value,"http://",7))p=value+7;
-  return p&&*p&&*p!='/'&&*p!=' ' ? Valid:Malformed;
+  if(!p||!*p||*p=='/'||*p=='?'||*p=='#')return Malformed;
+  const char* hostEnd=p;
+  while(*hostEnd&&*hostEnd!='/'&&*hostEnd!='?'&&*hostEnd!='#'){
+   const unsigned char ch=(unsigned char)*hostEnd;
+   if(ch<=32||ch>=127||ch=='@'||ch=='\\\\')return Malformed;
+   ++hostEnd;
+  }
+  if(hostEnd==p)return Malformed;
+  for(const char* q=hostEnd;*q;++q){const unsigned char ch=(unsigned char)*q;if(ch<=32||ch>=127||ch=='\\\\')return Malformed;}
+  return Valid;
  }
  std::size_t i=(value[0]=='-'||value[0]=='+')?1:0;
  if(i==n)return Malformed;
